@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS, AllowAny
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from users.models import User
 
@@ -17,7 +18,6 @@ from .filters import RecipeFilter
 from .mixins import ListRetrieveViewSet
 from .models import (Favorites, Ingredients, RecipeIngredients, Recipes,
                      ShoppingCart, Tags)
-from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 
 
 @action(detail=False, methods=['get'])
@@ -45,10 +45,7 @@ class IngredientViewSet(ListRetrieveViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    queryset = Recipes.objects.all()
-    permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
-    model = Recipes
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (DjangoFilterBackend, )
     filterset_class = RecipeFilter
 
