@@ -66,10 +66,10 @@ jobs:
             cd infra/
             sudo docker-compose stop
             sudo docker container rm infra_backend_1
+            sudo docker-compose rm backend
             sudo docker image rm romaleg/backend-foodgram:latest
             sudo docker pull romaleg/backend-foodgram:latest
             sudo docker pull romaleg/frontend-foodgram:latest
-            sudo docker-compose rm backend
 
       - name: docker-compose up
         uses: appleboy/ssh-action@master
