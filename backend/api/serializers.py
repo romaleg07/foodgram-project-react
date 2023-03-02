@@ -162,7 +162,7 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         ).data
 
 
-class FollowbeSerializer(serializers.ModelSerializer):
+class FollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follow
         fields = ('id', 'author', 'user')

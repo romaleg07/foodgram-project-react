@@ -1,4 +1,4 @@
-from api.serializers import (ChangePasswordSerializer, FollowbeSerializer,
+from api.serializers import (ChangePasswordSerializer, FollowSerializer,
                              UserIncludeSerializer, UsersSerializer)
 from django.shortcuts import get_object_or_404
 from foodgram.core.pagination import PageNumberLimitPagination
@@ -20,7 +20,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def subscribe(self, request, pk=None):
         author = get_object_or_404(self.queryset, pk=pk)
-        serializer = FollowbeSerializer(
+        serializer = FollowSerializer(
             context={
                 'request': request,
                 'author': author
@@ -44,7 +44,7 @@ class UsersViewSet(viewsets.ModelViewSet):
     def unsubscribe(self, request, pk=None):
         author = get_object_or_404(self.queryset, pk=pk)
         get_object_or_404(
-            Subscribe, author=author, user=self.request.user
+            Follow, author=author, user=self.request.user
         ).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
