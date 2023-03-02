@@ -2,7 +2,7 @@ from drf_extra_fields.fields import Base64ImageField
 from recipes.models import (Favorites, Ingredients, RecipeIngredients, Recipes,
                             ShoppingCart, Tags)
 from rest_framework import serializers
-from users.models import Subscribe, User
+from users.models import Follow, User
 
 
 class UsersSerializer(serializers.ModelSerializer):
@@ -162,9 +162,9 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         ).data
 
 
-class SubscribeSerializer(serializers.ModelSerializer):
+class FollowbeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Subscribe
+        model = Follow
         fields = ('id', 'author', 'user')
         read_only_fields = fields
 
@@ -173,7 +173,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         if (
             author == user
-            or Subscribe.objects.filter(
+            or Follow.objects.filter(
                 author=author,
                 user=user
             ).exists()

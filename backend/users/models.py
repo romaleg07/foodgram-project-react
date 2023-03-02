@@ -28,7 +28,7 @@ class User(AbstractUser):
         ]
 
 
-class Subscribe(models.Model):
+class Follow(models.Model):
     user = models.ForeignKey(
         User,
         related_name='subscriber',
