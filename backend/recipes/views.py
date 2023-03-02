@@ -1,3 +1,7 @@
+from api.serializers import (FavoriteSerializer, IngredientSerializer,
+                             RecipeReadSerializer, RecipeShortSerializer,
+                             RecipeWriteSerializer, ShoppingCartSerializer,
+                             TagSerializer)
 from django.db.models import Exists, OuterRef
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
@@ -6,11 +10,6 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
-
-from api.serializers import (FavoriteSerializer, IngredientSerializer,
-                             RecipeReadSerializer, RecipeShortSerializer,
-                             RecipeWriteSerializer, ShoppingCartSerializer,
-                             TagSerializer)
 from users.models import User
 
 from . import generate_cart
