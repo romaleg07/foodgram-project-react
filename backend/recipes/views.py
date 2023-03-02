@@ -10,6 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
 from users.models import User
+from django.db.models import Exists, OuterRef
 
 from . import generate_cart
 from .filters import RecipeFilter
@@ -51,6 +52,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (DjangoFilterBackend, )
     filterset_class = RecipeFilter
 
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Recipes.objects.all()
+
+        user_favorited = Favorites.objects.filter(
+            recipe=OuterRef('pk'),
+            user=self.request.user,
+        )
+        user_shoppingcart = ShoppingCart.objects.filter(
+            recipe=OuterRef('pk'),
+            user=self.request.user,
+        )
+
+        queryset = Recipes.objects.annotate(
+            is_favorited=Exists(user_favorited)
+        ).annotate(
+            is_in_shopping_cart=Exists(user_shoppingcart)
+        )
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
@@ -85,7 +106,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @staticmethod
     def delete_from(pk, request, model):
         recipe = get_object_or_404(Recipes, pk=pk)
-        get_object_or_404(model, recipe=recipe, user=request.user).delete()
+        get_object_or_404(model, recipe=recipe, user=request.user).delete() 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['post'])

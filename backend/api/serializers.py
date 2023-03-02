@@ -11,7 +11,8 @@ class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'password')
+                  'first_name', 'last_name', 'password',
+                  'is_subscribed')
         extra_kwargs = {"password": {"write_only": True}}
 
     '''
@@ -30,6 +31,12 @@ class UsersSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if not request or request.user.is_anonymous:
+            return False
+        return obj.subscribed.filter(user=request.user).exists()
 
 
 class ChangePasswordSerializer(serializers.Serializer):
