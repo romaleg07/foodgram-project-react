@@ -1,7 +1,4 @@
-from api.serializers import (FavoriteSerializer, IngredientSerializer,
-                             RecipeReadSerializer, RecipeShortSerializer,
-                             RecipeWriteSerializer, ShoppingCartSerializer,
-                             TagSerializer)
+from django.db.models import Exists, OuterRef
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -9,8 +6,12 @@ from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import SAFE_METHODS, AllowAny
 from rest_framework.response import Response
+
+from api.serializers import (FavoriteSerializer, IngredientSerializer,
+                             RecipeReadSerializer, RecipeShortSerializer,
+                             RecipeWriteSerializer, ShoppingCartSerializer,
+                             TagSerializer)
 from users.models import User
-from django.db.models import Exists, OuterRef
 
 from . import generate_cart
 from .filters import RecipeFilter
@@ -106,7 +107,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @staticmethod
     def delete_from(pk, request, model):
         recipe = get_object_or_404(Recipes, pk=pk)
-        get_object_or_404(model, recipe=recipe, user=request.user).delete() 
+        get_object_or_404(model, recipe=recipe, user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(detail=True, methods=['post'])

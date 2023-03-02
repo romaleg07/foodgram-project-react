@@ -1,11 +1,12 @@
-from api.serializers import (ChangePasswordSerializer, SubscribeSerializer,
-                             UserIncludeSerializer, UsersSerializer)
 from django.shortcuts import get_object_or_404
-from foodgram.core.pagination import PageNumberLimitPagination
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+
+from api.serializers import (ChangePasswordSerializer, SubscribeSerializer,
+                             UserIncludeSerializer, UsersSerializer)
+from foodgram.core.pagination import PageNumberLimitPagination
 
 from .models import Subscribe, User
 
