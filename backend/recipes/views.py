@@ -2,12 +2,14 @@ from api.serializers import (FavoriteSerializer, IngredientSerializer,
                              RecipeReadSerializer, RecipeShortSerializer,
                              RecipeWriteSerializer, ShoppingCartSerializer,
                              TagSerializer)
+from django.db.models import Exists, OuterRef
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import SAFE_METHODS, AllowAny
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from users.models import User
 
@@ -16,7 +18,6 @@ from .filters import RecipeFilter
 from .mixins import ListRetrieveViewSet
 from .models import (Favorites, Ingredients, RecipeIngredients, Recipes,
                      ShoppingCart, Tags)
-from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 
 
 @action(detail=False, methods=['get'])
@@ -44,12 +45,28 @@ class IngredientViewSet(ListRetrieveViewSet):
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
-    permission_classes = (AllowAny,)
-    queryset = Recipes.objects.all()
-    permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
-    model = Recipes
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (DjangoFilterBackend, )
     filterset_class = RecipeFilter
+
+    def get_queryset(self):
+        if self.request.user.is_anonymous:
+            return Recipes.objects.all()
+
+        user_favorited = Favorites.objects.filter(
+            recipe=OuterRef('pk'),
+            user=self.request.user,
+        )
+        user_shoppingcart = ShoppingCart.objects.filter(
+            recipe=OuterRef('pk'),
+            user=self.request.user,
+        )
+
+        return Recipes.objects.annotate(
+            is_favorited=Exists(user_favorited)
+        ).annotate(
+            is_in_shopping_cart=Exists(user_shoppingcart)
+        )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
