@@ -130,10 +130,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    # def to_representation(self, instance):
-    #     context = {'request': self.context.get('request')}
-    #     return GetRecipeSerializer(instance, context=context).data
-
 
 class RecipeShortSerializer(serializers.ModelSerializer):
     class Meta:
