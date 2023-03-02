@@ -65,12 +65,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
             user=self.request.user,
         )
 
-        queryset = Recipes.objects.annotate(
+        return Recipes.objects.annotate(
             is_favorited=Exists(user_favorited)
         ).annotate(
             is_in_shopping_cart=Exists(user_shoppingcart)
         )
-        return queryset
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
