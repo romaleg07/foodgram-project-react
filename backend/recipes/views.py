@@ -123,7 +123,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(detail=False)
     def download_shopping_cart(self, request):
-        recipes = Recipes.objects.filter(shoppingcart__user=self.request.user)
+        recipes = Recipes.objects.filter(shopping_cart__user=self.request.user)
         ingredients_to_recipes = RecipeIngredients.objects.filter(
             recipe__in=recipes
         )
