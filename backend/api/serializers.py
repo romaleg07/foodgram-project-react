@@ -202,13 +202,13 @@ class UserIncludeSerializer(UsersSerializer):
         )
 
     def get_recipes_count(self, obj):
-        return obj.recipes.count()
-
+        return obj.user.count()
+ 
     def get_recipes(self, obj):
         recipes_limit = (
             self._context['request'].query_params.get('recipes_limit', False)
         )
-        recipes = obj.recipes.all()
+        recipes = obj.user.all()
         if recipes_limit:
             recipes = recipes[:abs(int(recipes_limit))]
 

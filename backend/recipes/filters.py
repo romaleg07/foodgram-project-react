@@ -1,31 +1,24 @@
-from django_filters.rest_framework import FilterSet, filters
+import django_filters.rest_framework as filters
+from rest_framework.filters import SearchFilter
 
-from .models import Recipes, Tags
+from .models import Recipe, Tag
 
 
-class RecipeFilter(FilterSet):
+class RecipeFilter(filters.FilterSet):
+    is_favorited = filters.BooleanFilter(field_name='is_favorited')
+    is_in_shopping_cart = filters.BooleanFilter(
+        field_name='is_in_shopping_cart'
+    )
     tags = filters.ModelMultipleChoiceFilter(
+        queryset=Tag.objects.all(),
         field_name='tags__slug',
         to_field_name='slug',
-        queryset=Tags.objects.all(),
     )
 
-    is_favorited = filters.BooleanFilter(method='filter_is_favorited')
-    is_in_shopping_cart = filters.BooleanFilter(
-        method='filter_is_in_shopping_cart')
-
     class Meta:
-        model = Recipes
-        fields = ('tags', 'author',)
+        model = Recipe
+        fields = ('is_favorited', 'is_in_shopping_cart', 'tags', 'author',)
 
-    def filter_is_favorited(self, queryset, name, value):
-        user = self.request.user
-        if value and not user.is_anonymous:
-            return queryset.filter(favorites__user=user)
-        return queryset
 
-    def filter_is_in_shopping_cart(self, queryset, name, value):
-        user = self.request.user
-        if value and not user.is_anonymous:
-            return queryset.filter(shopping_cart__user=user)
-        return queryset
+class IngredientSearchFilter(SearchFilter):
+    search_param = 'name'
