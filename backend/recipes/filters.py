@@ -1,7 +1,7 @@
 import django_filters.rest_framework as filters
 from rest_framework.filters import SearchFilter
 
-from .models import Recipe, Tag
+from .models import Recipes, Tags
 
 
 class RecipeFilter(filters.FilterSet):
@@ -10,13 +10,13 @@ class RecipeFilter(filters.FilterSet):
         field_name='is_in_shopping_cart'
     )
     tags = filters.ModelMultipleChoiceFilter(
-        queryset=Tag.objects.all(),
+        queryset=Tags.objects.all(),
         field_name='tags__slug',
         to_field_name='slug',
     )
 
     class Meta:
-        model = Recipe
+        model = Recipes
         fields = ('is_favorited', 'is_in_shopping_cart', 'tags', 'author',)
 
 
