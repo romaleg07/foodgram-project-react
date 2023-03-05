@@ -1,10 +1,11 @@
 from django.core.validators import MinValueValidator
 from django.db import models
+
 from users.models import User
 
 
 class Tags(models.Model):
-    name = models.CharField('Заголовок', max_length=200)
+    name = models.CharField('Заголовок', max_length=200, db_index=True)
     color = models.CharField('Цвет', max_length=7)
     slug = models.SlugField('ссылка', max_length=200, unique=True)
 
@@ -17,7 +18,7 @@ class Tags(models.Model):
 
 
 class Ingredients(models.Model):
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField('Название', max_length=200, db_index=True)
     measurement_unit = models.CharField('Еденица измерения', max_length=200)
 
     class Meta:
@@ -43,7 +44,7 @@ class Recipes(models.Model):
         'Изображение рецепта',
         upload_to='recipes/',
     )
-    name = models.CharField('Название', max_length=200)
+    name = models.CharField('Название', max_length=200, db_index=True)
     text = models.TextField(
         verbose_name='Рецепт',
         help_text='Рецепт'

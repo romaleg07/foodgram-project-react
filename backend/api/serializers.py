@@ -1,7 +1,8 @@
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+
 from recipes.models import (Favorites, Ingredients, RecipeIngredients, Recipes,
                             ShoppingCart, Tags)
-from rest_framework import serializers
 from users.models import Follow, User
 
 
@@ -43,6 +44,12 @@ class ChangePasswordSerializer(serializers.Serializer):
     model = User
     new_password = serializers.CharField(max_length=128, required=True)
     current_password = serializers.CharField(max_length=128, required=True)
+
+    def validate_current_password(self, value):
+        user = self.context.get('request').user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Wrong password")
+        return value
 
 
 class TagSerializer(serializers.ModelSerializer):
