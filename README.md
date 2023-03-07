@@ -4,8 +4,11 @@
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
 
 [Foodgram](http://158.160.27.117/) - Мой проектик
+
 админка: [Foodgram](http://158.160.27.117/amin)
+
 логин: romaleg.sky@yandex.ru
+
 пароль: qwerty
 
 Foodgram это сервис для добавления рецептов, подписи на авторов, создания списков ингредиентов и фильтрацией по тегам.
