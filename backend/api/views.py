@@ -1,26 +1,25 @@
-from django.db.models import Exists, OuterRef
-from django.http import FileResponse
-from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
-                                        IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
-from rest_framework.response import Response
-
 from api.serializers import (ChangePasswordSerializer, FavoriteSerializer,
                              FollowSerializer, IngredientSerializer,
                              RecipeReadSerializer, RecipeShortSerializer,
                              RecipeWriteSerializer, ShoppingCartSerializer,
                              TagSerializer, UserIncludeSerializer,
                              UsersSerializer)
+from django.db.models import Exists, OuterRef
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from foodgram.core.pagination import PageNumberLimitPagination
 from recipes import generate_cart
 from recipes.filters import RecipeFilter
 from recipes.mixins import ListRetrieveViewSet
 from recipes.models import (Favorites, Ingredients, RecipeIngredients, Recipes,
                             ShoppingCart, Tags)
+from rest_framework import generics, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
 from users.models import Follow, User
 
 
