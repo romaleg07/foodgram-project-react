@@ -25,7 +25,7 @@ class Ingredients(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return self.name
+        return f'{self.name}, {self.measurement_unit}'
 
 
 class Recipes(models.Model):
@@ -89,7 +89,6 @@ class RecipeIngredients(models.Model):
     )
     amount = models.PositiveSmallIntegerField(
         'Количество',
-        related_name='amount',
         validators=[MinValueValidator(1, message='Минимальное количество 1!')]
     )
 

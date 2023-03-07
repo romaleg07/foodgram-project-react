@@ -72,7 +72,7 @@ class ReсipeIngredientSerializer(serializers.ModelSerializer):
 class AddIngredientSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(
         queryset=Ingredients.objects.all(),
-        source='ingredient')
+        source='ingredients')
 
     class Meta:
         model = RecipeIngredients
@@ -115,10 +115,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_ingredients(self, recipe, ingredients):
+        print('фыфф')
         RecipeIngredients.objects.bulk_create(
             RecipeIngredients(
                 recipe=recipe,
-                ingredient=ingredient.get('ingredient'),
+                ingredient=ingredient.get('ingredients'),
                 amount=ingredient.get('amount')
             ) for ingredient in ingredients)
 
@@ -141,6 +142,12 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         self.get_ingredients(instance, ingredients)
 
         return super().update(instance, validated_data)
+
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        context = {'request': request}
+        return RecipeReadSerializer(instance,
+                                    context=context).data
 
 
 class RecipeShortSerializer(serializers.ModelSerializer):
