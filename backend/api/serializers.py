@@ -63,7 +63,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ResipeIngredientSerializer(serializers.ModelSerializer):
+class ReсipeIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = RecipeIngredients
         fields = '__all__'
@@ -80,7 +80,7 @@ class AddIngredientSerializer(serializers.ModelSerializer):
 
 
 class RecipeReadSerializer(serializers.ModelSerializer):
-    ingredients = ResipeIngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     author = UsersSerializer(read_only=True)
     image = Base64ImageField()
