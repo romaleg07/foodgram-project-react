@@ -22,7 +22,7 @@ services:
       - .env
 
   frontend:
-    image: romaleg/frontend-foodgram:v30.01.2023
+    image: romaleg/frontend-foodgram:latest
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:

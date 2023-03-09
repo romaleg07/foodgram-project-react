@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/-Python-464641?style=flat-square&logo=Python)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
 
-[Foodgram](http://158.160.27.117/) - Мой проектик
+[Foodgram](http://158.160.7.58/) - Мой проектик
 
 админка: [Foodgram](http://158.160.27.117/amin)
 

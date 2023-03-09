@@ -3,13 +3,18 @@ import cn from 'classnames'
 import { Subscription } from '../index'
 
 const SubscriptionList = ({ subscriptions, removeSubscription }) => {
-  return <div className={styles.subscriptionList}>
-    {subscriptions.map(subscription => <Subscription
-      key={subscription.id}
-      removeSubscription={removeSubscription}
-      {...subscription}
-    />)}
-  </div>
+  if(subscriptions) {
+   return <div className={styles.subscriptionList}>
+      {subscriptions.map(subscription => <Subscription
+        key={subscription.id}
+        removeSubscription={removeSubscription}
+        {...subscription}
+      />)}
+    </div>
+  } else {
+    return 'Подписок нет'
+  }
+  
 }
 
 export default SubscriptionList
